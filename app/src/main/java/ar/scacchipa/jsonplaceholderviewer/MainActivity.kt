@@ -11,7 +11,10 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 val appModule = module {
-    single <IJPHRepository> { JPHRepository() }
+
+    factory { provideRetrofit() }
+    single <IJPHSourceData> { provideNetworkApi(get()) }
+    single <IJPHRepository> { JPHRepository( get() ) }
     single <MiddleCommentsUserCase> { MiddleCommentsUserCase( get() ) }
     viewModel { MiddleCommentViewModel( get() ) }
 }
