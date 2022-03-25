@@ -6,17 +6,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MiddleCommentViewModel: ViewModel() {
+class MiddleCommentViewModel(
+    private val userCase: MiddleCommentsUserCase // = MiddleCommentsUserCase()
+): ViewModel() {
 
-    var userCase: MiddleCommentsUserCase? = null
     var middleCommentList = MutableLiveData<List<Comment>?>()
 
-
     fun update() {
-        userCase?.let {
-            viewModelScope.launch(Dispatchers.Main) {
-                middleCommentList.value = it.getMiddleCommentList()
-            }
+        viewModelScope.launch(Dispatchers.Main) {
+            middleCommentList.value = userCase.getMiddleCommentList()
         }
     }
 }
