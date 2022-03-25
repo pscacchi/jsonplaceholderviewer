@@ -1,9 +1,11 @@
-package ar.scacchipa.jsonplaceholderviewer
+package ar.scacchipa.jsonplaceholderviewer.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ar.scacchipa.jsonplaceholderviewer.R
+import ar.scacchipa.jsonplaceholderviewer.data.Comment
 import ar.scacchipa.jsonplaceholderviewer.databinding.CommentLayoutBinding
 
 class CommentAdapter (
@@ -32,6 +34,4 @@ class CommentAdapter (
     override fun getItemCount(): Int {
         return comments.size
     }
-
-
 }
