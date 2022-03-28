@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ar.scacchipa.jsonplaceholderviewer.databinding.ActivityMainBinding
 import ar.scacchipa.jsonplaceholderviewer.ui.CommentAdapter
 import ar.scacchipa.jsonplaceholderviewer.ui.MiddleCommentViewModel
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val commentVM: MiddleCommentViewModel by inject()
+    private val commentVM: MiddleCommentViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.middleCommentButton.setOnClickListener {
-            commentVM.update()
+            commentVM.updateMiddleComments()
         }
         commentVM.middleCommentList.observe(this) { comments ->
             comments?.let {

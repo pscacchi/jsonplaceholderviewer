@@ -14,4 +14,6 @@ class MiddleCommentsUserCase(
             val comments = jphRepository.getComment(postCount / 2)
             return@withContext comments
         }
+    fun nullFunction() = null
+
 }

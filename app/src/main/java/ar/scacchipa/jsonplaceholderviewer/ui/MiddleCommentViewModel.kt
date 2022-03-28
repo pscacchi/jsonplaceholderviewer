@@ -14,7 +14,7 @@ class MiddleCommentViewModel(
 
     var middleCommentList = MutableLiveData<List<Comment>?>()
 
-    fun update() {
+    fun updateMiddleComments() {
         viewModelScope.launch(Dispatchers.Main) {
             middleCommentList.value = userCase.getMiddleCommentList()
         }
