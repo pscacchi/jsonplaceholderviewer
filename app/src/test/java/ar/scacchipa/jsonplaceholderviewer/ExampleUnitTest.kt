@@ -4,12 +4,13 @@ import ar.scacchipa.jsonplaceholderviewer.data.Comment
 import ar.scacchipa.jsonplaceholderviewer.data.ICommentRepository
 import ar.scacchipa.jsonplaceholderviewer.data.Post
 import ar.scacchipa.jsonplaceholderviewer.domain.MiddleCommentsUserCase
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class MockRepository: ICommentRepository {
     override suspend fun getPosts(): List<Post> {
@@ -55,7 +56,7 @@ class MockRepository: ICommentRepository {
     }
 
     override suspend fun getComment(id: Int): List<Comment> {
-        return if (id == 5) listOf(
+        return if (id == 4) listOf(
             Comment(
                 5, 206,
                 "et fugit eligendi deleniti quidem qui sint nihil autem",
@@ -97,17 +98,19 @@ class ExampleUnitTest: KoinTest {
     private val middleCommentsUserCase: MiddleCommentsUserCase by inject()
 
     @Test
-    fun middleComment() {
+    fun middleComment() = runBlocking {
 
         startKoin {
             modules(
                 module {
-                    single { MockRepository() }
-                    single { MiddleCommentsUserCase(get()) }
+                    single { MockRepository() as ICommentRepository }
+                    single { MiddleCommentsUserCase( get() ) }
                 })
         }
-        val comments = middleCommentsUserCase.nullFunction()
 
-        assertNull(comments == null)
+        //val middleCommentsUserCase = get<MiddleCommentsUserCase>()
+        val comments = middleCommentsUserCase.getMiddleCommentList()
+
+        assertTrue (  comments != null )
     }
 }
