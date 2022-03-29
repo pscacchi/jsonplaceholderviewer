@@ -6,12 +6,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MiddleCommentsUserCase(
-    private val jphRepository: ICommentRepository// = JPHRepository()
+    private val commentRepository: ICommentRepository// = CommentRepository()
 ) {
     suspend fun getMiddleCommentList(): List<Comment> =
         withContext(Dispatchers.IO) {
-            val postCount = jphRepository.getPosts().size
-            val comments = jphRepository.getComment(postCount / 2)
+            val postCount = commentRepository.getPosts().size
+            val comments = commentRepository.getComment(postCount / 2)
             return@withContext comments
         }
     fun nullFunction() = null
