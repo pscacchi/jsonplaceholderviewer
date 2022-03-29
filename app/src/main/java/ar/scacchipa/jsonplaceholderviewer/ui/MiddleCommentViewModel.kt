@@ -1,8 +1,6 @@
 package ar.scacchipa.jsonplaceholderviewer.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import ar.scacchipa.jsonplaceholderviewer.data.Comment
 import ar.scacchipa.jsonplaceholderviewer.domain.MiddleCommentsUserCase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,11 +12,18 @@ class MiddleCommentViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
 ): ViewModel() {
 
-    var middleCommentList = MutableLiveData<List<Comment>?>()
+    private var middleCommentList = MutableLiveData<List<Comment>?>()
+    fun setMiddleCommentList(comments: List<Comment>) {
+        this.middleCommentList.value = comments
+    }
 
+    fun setCommentObserve(owner: LifecycleOwner, observer: Observer<in List<Comment>?>) {
+        middleCommentList.observe(owner, observer)
+    }
     fun updateMiddleComments() {
         viewModelScope.launch(dispatcher) {
             middleCommentList.value = userCase.getMiddleCommentList()
         }
     }
 }
+

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         binding.middleCommentButton.setOnClickListener {
             commentVM.updateMiddleComments()
         }
-        commentVM.middleCommentList.observe(this) { comments ->
+        commentVM.setCommentObserve(this) { comments ->
             comments?.let {
                 binding.commentRecyclerView.adapter = CommentAdapter(it)
             }
