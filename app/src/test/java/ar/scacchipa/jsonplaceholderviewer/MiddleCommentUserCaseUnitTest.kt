@@ -11,6 +11,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class MockPostRepository: IPostRepository {
@@ -59,7 +60,7 @@ class MockPostRepository: IPostRepository {
 
 class MockCommentRepository: ICommentRepository {
     override suspend fun getComment(id: Int): List<Comment> {
-        return if (id == 4) listOf(
+        return if (id == 5) listOf(
             Comment(
                 5, 206,
                 "et fugit eligendi deleniti quidem qui sint nihil autem",
@@ -96,13 +97,12 @@ class MockCommentRepository: ICommentRepository {
     }
 }
 
-class ExampleUnitTest: KoinTest {
+class MiddleCommentUserCaseUnitTest: KoinTest {
 
     private val middleCommentsUserCase: MiddleCommentsUserCase by inject()
 
     @Test
-    fun middleComment() = runBlocking {
-
+    fun shouldGetMiddleComment() = runBlocking {
         startKoin {
             modules(
                 module {
@@ -114,6 +114,7 @@ class ExampleUnitTest: KoinTest {
 
         val comments = middleCommentsUserCase.getMiddleCommentList()
 
-        assertTrue (  comments != null )
+        assertEquals( comments.size, 5 )
+        assertTrue { comments.all { comment -> comment.postId == 5 } }
     }
 }

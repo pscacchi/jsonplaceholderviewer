@@ -13,7 +13,12 @@ class MiddleCommentsUserCase(
     suspend fun getMiddleCommentList(): List<Comment> =
         withContext(Dispatchers.IO) {
             val postCount = postRepository.getPosts().size
-            val comments = commentRepository.getComment(postCount / 2)
+            val postId: Int = if (postCount % 2 == 0) {
+                postCount / 2
+            } else {
+                postCount / 2 + 1
+            }
+            val comments = commentRepository.getComment(postId)
             return@withContext comments
         }
 }
