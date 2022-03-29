@@ -2,6 +2,7 @@ package ar.scacchipa.jsonplaceholderviewer
 
 import ar.scacchipa.jsonplaceholderviewer.data.Comment
 import ar.scacchipa.jsonplaceholderviewer.data.ICommentRepository
+import ar.scacchipa.jsonplaceholderviewer.data.IPostRepository
 import ar.scacchipa.jsonplaceholderviewer.data.Post
 import ar.scacchipa.jsonplaceholderviewer.domain.MiddleCommentsUserCase
 import kotlinx.coroutines.runBlocking
@@ -12,7 +13,7 @@ import org.koin.test.KoinTest
 import org.koin.test.inject
 import kotlin.test.assertTrue
 
-class MockRepository: ICommentRepository {
+class MockPostRepository: IPostRepository {
     override suspend fun getPosts(): List<Post> {
         return listOf(
             Post(
@@ -54,7 +55,9 @@ class MockRepository: ICommentRepository {
             )
         )
     }
+}
 
+class MockCommentRepository: ICommentRepository {
     override suspend fun getComment(id: Int): List<Comment> {
         return if (id == 4) listOf(
             Comment(
@@ -103,12 +106,12 @@ class ExampleUnitTest: KoinTest {
         startKoin {
             modules(
                 module {
-                    single { MockRepository() as ICommentRepository }
-                    single { MiddleCommentsUserCase( get() ) }
+                    single { MockPostRepository() as IPostRepository }
+                    single { MockCommentRepository() as ICommentRepository}
+                    single { MiddleCommentsUserCase( get(), get() ) }
                 })
         }
 
-        //val middleCommentsUserCase = get<MiddleCommentsUserCase>()
         val comments = middleCommentsUserCase.getMiddleCommentList()
 
         assertTrue (  comments != null )
