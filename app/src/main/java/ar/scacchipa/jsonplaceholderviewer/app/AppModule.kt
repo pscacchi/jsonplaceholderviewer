@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { provideRetrofit() }
-    single <ICommentSourceData> { provideNetworkApi( get() ) }
+    single <ITypicodeSourceData> { provideNetworkApi( get() ) }
     single <IPostRepository> { PostRepository( get() ) }
     single <ICommentRepository> { CommentRepository( get() ) }
     factory <MiddleCommentsUserCase> { MiddleCommentsUserCase( get(), get() ) }

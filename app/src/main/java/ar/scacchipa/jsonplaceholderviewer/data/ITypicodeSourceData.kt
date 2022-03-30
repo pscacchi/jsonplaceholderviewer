@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface ICommentSourceData {
+interface ITypicodeSourceData {
     @GET("posts")
     suspend fun getPosts(): Response<List<Post>>
 
@@ -22,6 +22,6 @@ fun provideRetrofit(): Retrofit {
         .build()
 }
 
-fun provideNetworkApi(retrofit: Retrofit): ICommentSourceData =
-    retrofit.create(ICommentSourceData::class.java)
+fun provideNetworkApi(retrofit: Retrofit): ITypicodeSourceData =
+    retrofit.create(ITypicodeSourceData::class.java)
 
