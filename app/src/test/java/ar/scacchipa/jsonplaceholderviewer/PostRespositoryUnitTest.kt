@@ -14,11 +14,12 @@ import retrofit2.Response
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class MockSourceData: ITypicodeSourceData {
+class MockPostSourceData: IRemotePostSourceData {
     override suspend fun getPosts(): Response<List<Post>> {
-        return Response.success( getMockPosts() )
+        return Response.success(getMockPosts())
     }
-
+}
+class MockCommentSourceData: IRemoteCommentSourceData {
     override suspend fun getComment(id: String): Response<List<Comment>> {
         return if (id.toInt() == 5) {
             Response.success( getMockComments() )
@@ -34,7 +35,7 @@ class PostRespositoryUnitTest: KoinTest {
     val koinTestRule = KoinTestRule.create {
         modules(
             module {
-                single { MockSourceData() as ITypicodeSourceData }
+                single { MockPostSourceData() as IRemotePostSourceData }
                 single { PostRepository(get()) as IPostRepository }
             })
     }
@@ -63,7 +64,7 @@ class CommentRepositoryUnit: KoinTest {
     val koinTestRule = KoinTestRule.create {
         modules(
             module {
-                factory { MockSourceData() as ITypicodeSourceData }
+                factory { MockCommentSourceData() as IRemoteCommentSourceData }
                 factory { CommentRepository( get() ) as ICommentRepository }
             }
         )

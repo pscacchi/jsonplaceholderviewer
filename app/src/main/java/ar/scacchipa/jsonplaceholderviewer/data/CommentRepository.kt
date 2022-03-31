@@ -1,7 +1,7 @@
 package ar.scacchipa.jsonplaceholderviewer.data
 
 class CommentRepository(
-    var apiSourceData: ITypicodeSourceData// = provideNetworkApi(provideRetrofit())
+    var apiSourceData: IRemoteCommentSourceData // = provideNetworkApi(provideRetrofit())
 ): ICommentRepository  {
     override suspend fun getComment(id: Int): List<Comment> {
         apiSourceData.getComment(id.toString()).let { response ->

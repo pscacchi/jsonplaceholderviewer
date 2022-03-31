@@ -1,10 +1,10 @@
 package ar.scacchipa.jsonplaceholderviewer.data
 
 class PostRepository(
-    var apiSourceData: ITypicodeSourceData// = provideNetworkApi(provideRetrofit())
+    var apiPostSourceData: IRemotePostSourceData// = provideNetworkApi(provideRetrofit())
 ): IPostRepository {
     override suspend fun getPosts(): List<Post> {
-        val response = apiSourceData.getPosts()
+        val response = apiPostSourceData.getPosts()
         return if (response.isSuccessful) {
             response.body() ?: listOf()
         } else {
