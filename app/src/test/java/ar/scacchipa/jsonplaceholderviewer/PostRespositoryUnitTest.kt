@@ -3,16 +3,16 @@ package ar.scacchipa.jsonplaceholderviewer
 import ar.scacchipa.jsonplaceholderviewer.data.*
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 import org.koin.test.inject
 import retrofit2.Response
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-
 
 class MockSourceData: ITypicodeSourceData {
     override suspend fun getPosts(): Response<List<Post>> {
@@ -30,18 +30,19 @@ class MockSourceData: ITypicodeSourceData {
 
 class PostRespositoryUnitTest: KoinTest {
 
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        modules(
+            module {
+                single { MockSourceData() as ITypicodeSourceData }
+                single { PostRepository(get()) as IPostRepository }
+            })
+    }
+
     private val postRepository: IPostRepository by inject()
 
     @Test
     fun shouldGetNinePost() = runBlocking {
-        startKoin {
-            modules(
-                module {
-                    single { MockSourceData() as ITypicodeSourceData }
-                    single { PostRepository(get()) as IPostRepository }
-                })
-        }
-
         val posts = postRepository.getPosts()
 
         assertEquals(posts.size, 9)
@@ -58,19 +59,20 @@ class PostRespositoryUnitTest: KoinTest {
 
 class CommentRepositoryUnit: KoinTest {
 
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        modules(
+            module {
+                factory { MockSourceData() as ITypicodeSourceData }
+                factory { CommentRepository( get() ) as ICommentRepository }
+            }
+        )
+    }
+
     val commentRepository: ICommentRepository by inject()
 
     @Test
     fun shoulGetFiveCommentList() = runBlocking {
-        startKoin {
-            modules(
-                module {
-                    factory { MockSourceData() as ITypicodeSourceData }
-                    factory { CommentRepository( get() ) as ICommentRepository }
-                }
-            )
-        }
-
         val comments = commentRepository.getComment(5)
 
         assertEquals(comments.size, 5)
