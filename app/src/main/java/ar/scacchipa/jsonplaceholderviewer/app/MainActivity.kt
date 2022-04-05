@@ -1,38 +1,32 @@
-package ar.scacchipa.jsonplaceholderviewer
+package ar.scacchipa.jsonplaceholderviewer.app
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ar.scacchipa.jsonplaceholderviewer.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import ar.scacchipa.jsonplaceholderviewer.ui.CommentAdapter
+import ar.scacchipa.jsonplaceholderviewer.ui.MiddleCommentViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    var userCase = MiddleCommentsUserCase()
+    private val commentVM: MiddleCommentViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val commentVM: MiddleCommentViewModel by viewModels()
         val binding = ActivityMainBinding.inflate(layoutInflater)
         binding.commentRecyclerView.layoutManager = LinearLayoutManager(this)
 
         setContentView(binding.root)
 
         binding.middleCommentButton.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                 binding.commentRecyclerView.adapter =
-                    CommentAdapter( userCase.getMiddleCommentList() )
-            }
+            commentVM.updateMiddleComments()
         }
-        commentVM.middleCommentList.observe(this, { comments ->
+        commentVM.setCommentObserve(this) { comments ->
             comments?.let {
                 binding.commentRecyclerView.adapter = CommentAdapter(it)
             }
-        })
-
+        }
     }
 }

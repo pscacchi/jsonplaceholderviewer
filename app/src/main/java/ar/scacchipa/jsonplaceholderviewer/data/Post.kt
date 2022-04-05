@@ -1,4 +1,4 @@
-package ar.scacchipa.jsonplaceholderviewer
+package ar.scacchipa.jsonplaceholderviewer.data
 
 data class Post(
     val usertId: Int,
